@@ -1,8 +1,10 @@
 package com.sparta.post.controller;
 
+import com.sparta.post.dto.LoginRequestDto;
 import com.sparta.post.dto.SignupRequestDto;
 import com.sparta.post.dto.StatusResponseDto;
 import com.sparta.post.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +23,16 @@ public class UserController {
     public StatusResponseDto signup(SignupRequestDto requestDto) {
         userService.signup(requestDto);
         return new StatusResponseDto(200L, "SIGN_UP_SUCCESS");
+    }
+
+    @PostMapping("/user/login")
+    public StatusResponseDto login(LoginRequestDto requestDto, HttpServletResponse res) {
+        try {
+            userService.login(requestDto, res);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new StatusResponseDto(200L, "LOG_IN_SUCCESS");
     }
 }
