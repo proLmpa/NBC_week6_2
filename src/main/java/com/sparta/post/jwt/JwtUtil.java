@@ -73,10 +73,22 @@ public class JwtUtil {
         }
     }
 
+    // 2. 생성된 JWT를 Header에 저장
+    public void addJwtToHeader(String token, HttpServletResponse res) {
+        try {
+            token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
+
+            // Response 객체 헤더에 AUTHORIZATINO 추가
+            res.addHeader(AUTHORIZATION_HEADER, token);
+        } catch (UnsupportedEncodingException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     // 3. Cookie에 들어있던 JWT 토큰을 Substring
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(7);
+            return tokenValue.substring(BEARER_PREFIX.length());
         }
         logger.error("Not Found Token");
         throw new NullPointerException("Not Found Token");
@@ -106,18 +118,27 @@ public class JwtUtil {
 
     // HttpServletRequest 에서 Cookie Value : JWT 가져오기
     public String getTokenFromRequest(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
-                    try {
-                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
-                    } catch (UnsupportedEncodingException e) {
-                        return null;
-                    }
-                }
+        String header = req.getHeader(AUTHORIZATION_HEADER);
+        if(header != null) {
+            try {
+                return URLDecoder.decode(header, "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+            } catch (UnsupportedEncodingException e) {
+                throw null;
             }
         }
+//        Cookie[] cookies = req.getCookies();
+//        if(cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+//                    try {
+//                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+//                    } catch (UnsupportedEncodingException e) {
+//                        return null;
+//                    }
+//                }
+//            }
+//        }
         return null;
     }
+
 }

@@ -21,7 +21,7 @@ public class UserService {
     }
 
     // ADMIN_TOKEN
-    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    // private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public void signup(UserRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -53,8 +53,8 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        // JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
+        // JWT 생성 및 헤더에 저장 후 Response 객체에 추가
         String token = jwtUtil.createToken(user.getUsername());
-        jwtUtil.addJwtToCookie(token, res);
+        jwtUtil.addJwtToHeader(token, res);
     }
 }
