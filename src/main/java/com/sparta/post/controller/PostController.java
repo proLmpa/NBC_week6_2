@@ -3,6 +3,7 @@ package com.sparta.post.controller;
 import com.sparta.post.dto.PostRequestDto;
 import com.sparta.post.dto.PostResponseDto;
 import com.sparta.post.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,8 @@ public class PostController {
 
     // 게시글 작성하기 (요구사항.2)
     @PostMapping("/post")
-    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto) {
-        return postService.createPost(requestDto);
+    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, HttpServletRequest req) {
+        return postService.createPost(requestDto, req);
     }
 
     // 전체 게시글 작성 날짜 기준 내림차순으로 조회하기 (요구사항.1)
@@ -43,7 +44,7 @@ public class PostController {
 
     // 선택한 게시글 삭제하기 (요구사항.5)
     @DeleteMapping("/post/{id}")
-    public String deletePost(@PathVariable Long id, String password) {
-        return postService.deletePost(id, password);
+    public PostResponseDto deletePost(@PathVariable Long id) {
+        return postService.deletePost(id);
     }
 }

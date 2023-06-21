@@ -3,7 +3,10 @@ package com.sparta.post.service;
 import com.sparta.post.dto.PostRequestDto;
 import com.sparta.post.dto.PostResponseDto;
 import com.sparta.post.entity.Post;
+import com.sparta.post.entity.User;
+import com.sparta.post.jwt.JwtUtil;
 import com.sparta.post.repository.PostRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +15,18 @@ import java.util.List;
 @Service
 public class PostService {
     private final PostRepository  postRepository;
+    private final JwtUtil jwtUtil;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, JwtUtil jwtUtil) {
         this.postRepository = postRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     // 게시글 작성하기 (요구사항.2)
-    public PostResponseDto createPost(PostRequestDto requestDto) {
+    public PostResponseDto createPost(PostRequestDto requestDto, HttpServletRequest req){
+        User user = (User) req.getAttribute("user");
         // RequestDto -> Entity
-        Post post = new Post(requestDto);
+        Post post = new Post(requestDto, user.getUsername());
 
         // DB 저장
         Post savedPost = postRepository.save(post);
@@ -50,43 +56,28 @@ public class PostService {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 
-        // 비밀번호 일치 여부 확인
-        if(matchPassword(post, requestDto.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        } else {
-            // post 내용 수정
-            post.update(requestDto);
+        // post 내용 수정
+        post.update(requestDto);
 
-            PostResponseDto postResponseDto = new PostResponseDto(post);
+        PostResponseDto postResponseDto = new PostResponseDto(post);
 
-            return postResponseDto;
-        }
+        return postResponseDto;
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
-    public String deletePost(Long id, String password) {
+    public PostResponseDto deletePost(Long id) {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 
-        // 비밀번호 일치 여부 확인
-        if(matchPassword(post, password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        } else {
-            // post 내용 수정
-            postRepository.delete(post);
+        // post 내용 삭제
+        postRepository.delete(post);
 
-            return id + "번째 게시글을 삭제했습니다!";
-        }
+        return new PostResponseDto(200L, id+"번째 게시물이 정상적으로 삭제되었습니다.");
     }
 
     // 해당 게시글이 DB에 존재하는지 확인
     public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
-    }
-
-    // 비밀번호 일치 여부 확인하기
-    public boolean matchPassword(Post post , String password){
-        return !post.getPassword().equals(password);
     }
 }
