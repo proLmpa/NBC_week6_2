@@ -7,17 +7,23 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostResponseDto {
-    private Long id;
     private String title;
-    private String author;
+    private String username;
     private String contents;
     private LocalDateTime createdAt;
 
+    private Long statusCode;
+    private String message;
+
     public PostResponseDto(Post post) {
-        this.id = post.getId();
         this.title = post.getTitle();
-        this.author = post.getAuthor();
+        this.username = post.getUsername();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
+    }
+
+    public PostResponseDto(Long statusCode, String message){
+        this.statusCode = statusCode;
+        this.message = message;
     }
 }
