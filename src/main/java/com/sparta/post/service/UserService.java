@@ -37,6 +37,7 @@ public class UserService {
         // 사용자 등록
         User user = new User(username, password);
         userRepository.save(user);
+
     }
 
     public void login(LoginRequestDto requestDto, HttpServletResponse res) {
