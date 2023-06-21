@@ -12,18 +12,10 @@ public class PostResponseDto {
     private String contents;
     private LocalDateTime createdAt;
 
-    private Long statusCode;
-    private String message;
-
     public PostResponseDto(Post post) {
         this.title = post.getTitle();
         this.username = post.getUsername();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
-    }
-
-    public PostResponseDto(Long statusCode, String message){
-        this.statusCode = statusCode;
-        this.message = message;
     }
 }

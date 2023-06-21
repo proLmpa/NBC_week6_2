@@ -65,14 +65,12 @@ public class PostService {
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
-    public PostResponseDto deletePost(Long id) {
+    public void deletePost(Long id) {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 
         // post 내용 삭제
         postRepository.delete(post);
-
-        return new PostResponseDto(200L, id+"번째 게시물이 정상적으로 삭제되었습니다.");
     }
 
     // 해당 게시글이 DB에 존재하는지 확인

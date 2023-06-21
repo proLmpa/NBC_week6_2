@@ -2,6 +2,7 @@ package com.sparta.post.controller;
 
 import com.sparta.post.dto.PostRequestDto;
 import com.sparta.post.dto.PostResponseDto;
+import com.sparta.post.dto.UserResponseDto;
 import com.sparta.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,9 @@ public class PostController {
 
     // 선택한 게시글 삭제하기 (요구사항.5)
     @DeleteMapping("/post/{id}")
-    public PostResponseDto deletePost(@PathVariable Long id) {
-        return postService.deletePost(id);
+    public UserResponseDto deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+
+        return new UserResponseDto(200L, id+"번째 게시물이 정상적으로 삭제되었습니다.");
     }
 }
