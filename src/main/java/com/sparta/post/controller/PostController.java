@@ -18,7 +18,7 @@ public class PostController {
     }
 
     // 게시글 작성하기 (요구사항.2)
-    @PostMapping("/posts")
+    @PostMapping("/post")
     public PostResponseDto createPost(@RequestBody PostRequestDto requestDto) {
         return postService.createPost(requestDto);
     }
@@ -36,13 +36,13 @@ public class PostController {
     }
 
     // 선택한 게시글 수정하기 (요구사항.4)
-    @PutMapping("/posts/{id}")
+    @PutMapping("/post/{id}")
     public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
         return postService.updatePost(id, requestDto);
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
-    @DeleteMapping("/posts/{id}")
+    @DeleteMapping("/post/{id}")
     public String deletePost(@PathVariable Long id, String password) {
         return postService.deletePost(id, password);
     }
