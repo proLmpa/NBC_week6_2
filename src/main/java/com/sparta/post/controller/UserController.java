@@ -5,8 +5,10 @@ import com.sparta.post.dto.SignupRequestDto;
 import com.sparta.post.dto.StatusResponseDto;
 import com.sparta.post.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -20,7 +22,8 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public StatusResponseDto signup(SignupRequestDto requestDto) {
+    public StatusResponseDto signup(@Valid @RequestBody SignupRequestDto requestDto) {
+        // System.out.printf("%s %s\n", requestDto.getUsername(), requestDto.getPassword());
         userService.signup(requestDto);
         return new StatusResponseDto(200L, "SIGN_UP_SUCCESS");
     }
