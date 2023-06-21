@@ -39,14 +39,24 @@ public class PostController {
 
     // 선택한 게시글 수정하기 (요구사항.4)
     @PutMapping("/post/{id}")
-    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        return postService.updatePost(id, requestDto);
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, HttpServletRequest req) {
+        try{
+            return postService.updatePost(id, requestDto, req);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
     @DeleteMapping("/post/{id}")
-    public UserResponseDto deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
+    public UserResponseDto deletePost(@PathVariable Long id, HttpServletRequest req) {
+        try {
+            postService.deletePost(id, req);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new UserResponseDto(401L, "허가되지 않은 요청 API입니다.");
+        }
 
         return new UserResponseDto(200L, id+"번째 게시물이 정상적으로 삭제되었습니다.");
     }

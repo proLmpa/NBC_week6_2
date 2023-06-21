@@ -24,17 +24,15 @@ public class PostService {
 
     // 게시글 작성하기 (요구사항.2)
     public PostResponseDto createPost(PostRequestDto requestDto, HttpServletRequest req){
-        User user = (User) req.getAttribute("user");
-        // RequestDto -> Entity
+        // ServletRequest -> Entity, RequestDto -> Entity
+        User user = findUser(req);
         Post post = new Post(requestDto, user.getUsername());
 
         // DB 저장
         Post savedPost = postRepository.save(post);
 
         // Entity -> ResponseDto
-        PostResponseDto postResponseDto = new PostResponseDto(savedPost);
-
-        return postResponseDto;
+        return new PostResponseDto(savedPost);
     }
 
     // 전체 게시글 작성 날짜 내림차 순으로 조회하기 (요구사항.1)
@@ -52,30 +50,50 @@ public class PostService {
 
     // 선택한 게시글 수정하기 (요구사항.4)
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto) {
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, HttpServletRequest req) throws Exception {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
+        // 수정 요청자의 정보 가져오기
+        User user = findUser(req);
 
-        // post 내용 수정
-        post.update(requestDto);
+        if(matchUser(post, user)){
+            // post 내용 수정
+            post.update(requestDto);
 
-        PostResponseDto postResponseDto = new PostResponseDto(post);
+            PostResponseDto postResponseDto = new PostResponseDto(post);
 
-        return postResponseDto;
+            return postResponseDto;
+        } else {
+            throw new Exception("Unauthorized");
+        }
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
-    public void deletePost(Long id) {
+    public void deletePost(Long id, HttpServletRequest req) throws Exception {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
+        // 수정 요청자의 정보 가져오기
+        User user = findUser(req);
 
-        // post 내용 삭제
-        postRepository.delete(post);
+        if(matchUser(post, user)){
+            // post 내용 삭제
+            postRepository.delete(post);
+        }else {
+            throw new Exception("Unauthorized");
+        }
     }
 
     // 해당 게시글이 DB에 존재하는지 확인
     public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
+    }
+
+    public User findUser(HttpServletRequest req) {
+        return (User) req.getAttribute("user");
+    }
+
+    public boolean matchUser(Post post, User user) {
+        return post.getUsername().equals(user.getUsername());
     }
 }
