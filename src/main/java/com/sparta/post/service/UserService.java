@@ -1,7 +1,6 @@
 package com.sparta.post.service;
 
-import com.sparta.post.dto.LoginRequestDto;
-import com.sparta.post.dto.SignupRequestDto;
+import com.sparta.post.dto.UserRequestDto;
 import com.sparta.post.entity.User;
 import com.sparta.post.jwt.JwtUtil;
 import com.sparta.post.repository.UserRepository;
@@ -24,7 +23,7 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public void signup(SignupRequestDto requestDto) {
+    public void signup(UserRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
@@ -40,7 +39,7 @@ public class UserService {
 
     }
 
-    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
+    public void login(UserRequestDto requestDto, HttpServletResponse res) {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
@@ -50,7 +49,7 @@ public class UserService {
         );
 
         // 비밀번호 확인
-        if (password.equals(user.getPassword())) {
+        if (!password.equals(user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 

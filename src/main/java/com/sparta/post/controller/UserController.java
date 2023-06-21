@@ -1,8 +1,7 @@
 package com.sparta.post.controller;
 
-import com.sparta.post.dto.LoginRequestDto;
-import com.sparta.post.dto.SignupRequestDto;
-import com.sparta.post.dto.StatusResponseDto;
+import com.sparta.post.dto.UserRequestDto;
+import com.sparta.post.dto.UserResponseDto;
 import com.sparta.post.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -22,19 +21,19 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public StatusResponseDto signup(@Valid @RequestBody SignupRequestDto requestDto) {
+    public UserResponseDto signup(@Valid @RequestBody UserRequestDto requestDto) {
         userService.signup(requestDto);
-        return new StatusResponseDto(200L, "SIGN_UP_SUCCESS");
+        return new UserResponseDto(200L, "SIGN_UP_SUCCESS");
     }
 
     @PostMapping("/user/login")
-    public StatusResponseDto login(@Valid @RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
+    public UserResponseDto login(@Valid @RequestBody UserRequestDto requestDto, HttpServletResponse res) {
         try {
             userService.login(requestDto, res);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new StatusResponseDto(200L, "LOG_IN_SUCCESS");
+        return new UserResponseDto(200L, "LOG_IN_SUCCESS");
     }
 }

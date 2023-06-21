@@ -3,11 +3,11 @@ package com.sparta.post.dto;
 import lombok.Getter;
 
 @Getter
-public class StatusResponseDto {
+public class UserResponseDto {
     private Long status;
     private String message;
 
-    public StatusResponseDto(Long status, String message) {
+    public UserResponseDto(Long status, String message) {
         this.status = status;
         this.message = message;
     }
