@@ -6,7 +6,6 @@ import com.sparta.post.entity.User;
 import com.sparta.post.jwt.JwtUtil;
 import com.sparta.post.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,12 +14,10 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
@@ -29,7 +26,7 @@ public class UserService {
 
     public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
-        String password = passwordEncoder.encode(requestDto.getPassword());
+        String password = requestDto.getPassword();
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -52,7 +49,7 @@ public class UserService {
         );
 
         // 비밀번호 확인
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (password.equals(user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
