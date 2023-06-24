@@ -28,6 +28,7 @@ public class UserDetailsImpl implements UserDetails {
         return user.getUsername();
     }
 
+    // spring lv3. 추가 구현 문제
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

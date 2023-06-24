@@ -3,10 +3,8 @@ package com.sparta.post.controller;
 import com.sparta.post.dto.PostRequestDto;
 import com.sparta.post.dto.PostResponseDto;
 import com.sparta.post.dto.UserResponseDto;
-import com.sparta.post.entity.User;
 import com.sparta.post.security.UserDetailsImpl;
 import com.sparta.post.service.PostService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

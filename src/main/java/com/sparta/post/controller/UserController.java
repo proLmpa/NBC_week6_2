@@ -3,7 +3,6 @@ package com.sparta.post.controller;
 import com.sparta.post.dto.UserRequestDto;
 import com.sparta.post.dto.UserResponseDto;
 import com.sparta.post.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
