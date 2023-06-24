@@ -32,6 +32,7 @@ public class UserController {
             userService.login(requestDto, res);
         } catch (Exception e) {
             e.printStackTrace();
+            return new UserResponseDto(401L, "LOG_IN_FAILURE");
         }
 
         return new UserResponseDto(200L, "LOG_IN_SUCCESS");
