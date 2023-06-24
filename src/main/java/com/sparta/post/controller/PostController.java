@@ -3,8 +3,11 @@ package com.sparta.post.controller;
 import com.sparta.post.dto.PostRequestDto;
 import com.sparta.post.dto.PostResponseDto;
 import com.sparta.post.dto.UserResponseDto;
+import com.sparta.post.entity.User;
+import com.sparta.post.security.UserDetailsImpl;
 import com.sparta.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +24,9 @@ public class PostController {
 
     // 게시글 작성하기 (요구사항.2)
     @PostMapping("/post")
-    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, HttpServletRequest req) {
-        return postService.createPost(requestDto, req);
+    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        // UserDetails.getUser() : Authentication의 Principle
+        return postService.createPost(requestDto, userDetails.getUser());
     }
 
     // 전체 게시글 작성 날짜 기준 내림차순으로 조회하기 (요구사항.1)
@@ -39,9 +43,10 @@ public class PostController {
 
     // 선택한 게시글 수정하기 (요구사항.4)
     @PutMapping("/post/{id}")
-    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, HttpServletRequest req) {
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
-            return postService.updatePost(id, requestDto, req);
+            // UserDetails.getUser() : Authentication의 Principle
+            return postService.updatePost(id, requestDto, userDetails.getUser());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
@@ -50,9 +55,10 @@ public class PostController {
 
     // 선택한 게시글 삭제하기 (요구사항.5)
     @DeleteMapping("/post/{id}")
-    public UserResponseDto deletePost(@PathVariable Long id, HttpServletRequest req) {
+    public UserResponseDto deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            postService.deletePost(id, req);
+            // UserDetails.getUser() : Authentication의 Principle
+            postService.deletePost(id, userDetails.getUser());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new UserResponseDto(401L, "허가되지 않은 요청 API입니다.");

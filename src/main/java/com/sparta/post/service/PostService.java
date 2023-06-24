@@ -23,9 +23,8 @@ public class PostService {
     }
 
     // 게시글 작성하기 (요구사항.2)
-    public PostResponseDto createPost(PostRequestDto requestDto, HttpServletRequest req){
-        // ServletRequest -> Entity, RequestDto -> Entity
-        User user = findUser(req);
+    public PostResponseDto createPost(PostRequestDto requestDto, User user){
+        // RequestDto -> Entity
         Post post = new Post(requestDto, user.getUsername());
 
         // DB 저장
@@ -50,30 +49,24 @@ public class PostService {
 
     // 선택한 게시글 수정하기 (요구사항.4)
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, HttpServletRequest req) throws Exception {
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) throws Exception {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
-        // 수정 요청자의 정보 가져오기
-        User user = findUser(req);
 
         if(matchUser(post, user)){
             // post 내용 수정
             post.update(requestDto);
 
-            PostResponseDto postResponseDto = new PostResponseDto(post);
-
-            return postResponseDto;
+            return new PostResponseDto(post);
         } else {
             throw new Exception("Unauthorized");
         }
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
-    public void deletePost(Long id, HttpServletRequest req) throws Exception {
+    public void deletePost(Long id, User user) throws Exception {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
-        // 수정 요청자의 정보 가져오기
-        User user = findUser(req);
 
         if(matchUser(post, user)){
             // post 내용 삭제
