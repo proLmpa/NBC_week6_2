@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
 
         String token = jwtUtil.createToken(username);
-        jwtUtil.addJwtToCookie(token, response);
+        jwtUtil.addJwtToHeader(token, response);
     }
 
     @Override
