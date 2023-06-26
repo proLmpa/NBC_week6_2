@@ -19,9 +19,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
-    public CommentResponseDto createComment(Long id, CommentRequestDto requestDto, User user) {
+    public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
         // 선택한 게시글의 DB 존재 여부 확인
-        Post post = findPost(id);
+        Post post = findPost(requestDto.getPostId());
 
         // 댓글 등록 후 등록된 댓글 반환하기
         Comment comment = new Comment(requestDto, user.getUsername());
@@ -33,9 +33,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long id, Long commentId, CommentRequestDto requestDto, User user) throws Exception {
-        // 선택한 게시글과 댓글이 DB이 존재하는지 확인
-        Post post = findPost(id);
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) throws Exception {
+        // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);
 
         // 해당 사용자가 작성한 댓글 여부 확인
@@ -48,9 +47,8 @@ public class CommentService {
         }
     }
 
-    public void deleteComment(Long id, Long commentId, User user) throws Exception{
-        // 선택한 게시글과 댓글이 DB이 존재하는지 확인
-        Post post = findPost(id);
+    public void deleteComment(Long commentId, User user) throws Exception{
+        // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);
 
         // 해당 사용자가 작성한 댓글 여부 확인
