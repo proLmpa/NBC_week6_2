@@ -2,6 +2,7 @@ package com.sparta.post.service;
 
 import com.sparta.post.dto.UserRequestDto;
 import com.sparta.post.entity.User;
+import com.sparta.post.entity.UserRoleEnum;
 import com.sparta.post.jwt.JwtUtil;
 import com.sparta.post.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +23,8 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
-    // ADMIN_TOKEN
-    // private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+     // ADMIN_TOKEN
+     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public void signup(UserRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -35,8 +36,17 @@ public class UserService {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
+        // 사용자 ROLE 확인
+        UserRoleEnum role = UserRoleEnum.USER;
+        if(requestDto.isAdmin()) {
+            if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
         // 사용자 등록
-        User user = new User(username, password);
+        User user = new User(username, password, role);
         userRepository.save(user);
     }
 }

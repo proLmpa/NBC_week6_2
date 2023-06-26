@@ -1,16 +1,17 @@
 package com.sparta.post.controller;
 
+import com.sparta.post.dto.UserInfoDto;
 import com.sparta.post.dto.UserRequestDto;
 import com.sparta.post.dto.UserResponseDto;
+import com.sparta.post.entity.UserRoleEnum;
+import com.sparta.post.security.UserDetailsImpl;
 import com.sparta.post.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +39,14 @@ public class UserController {
 
         userService.signup(requestDto);
         return new UserResponseDto(200L, "SIGN_UP_SUCCESS");
+    }
+
+    @GetMapping("/user-info")
+    public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String username = userDetails.getUser().getUsername();
+        UserRoleEnum role = userDetails.getUser().getRole();
+        boolean isAdmin = (role == UserRoleEnum.ADMIN);
+
+        return new UserInfoDto(username, isAdmin);
     }
 }
