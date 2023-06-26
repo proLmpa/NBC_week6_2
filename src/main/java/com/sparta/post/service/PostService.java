@@ -6,7 +6,6 @@ import com.sparta.post.entity.Post;
 import com.sparta.post.entity.User;
 import com.sparta.post.jwt.JwtUtil;
 import com.sparta.post.repository.PostRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -80,10 +79,6 @@ public class PostService {
     public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
-    }
-
-    public User findUser(HttpServletRequest req) {
-        return (User) req.getAttribute("user");
     }
 
     public boolean matchUser(Post post, User user) {
