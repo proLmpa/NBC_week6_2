@@ -3,7 +3,6 @@ package com.sparta.blog.common.error;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 
 @Getter
 @Builder
@@ -19,6 +18,5 @@ public class BlogErrorResponse {
                         .errorMessage(error.getErrorMessage())
                         .build()
                 );
-
     }
 }

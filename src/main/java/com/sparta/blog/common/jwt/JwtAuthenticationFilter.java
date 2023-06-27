@@ -1,7 +1,7 @@
 package com.sparta.blog.common.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.error.BlogErrorCode;
 import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.user.dto.UserRequestDto;
 import com.sparta.blog.user.entity.UserRoleEnum;
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     )
             );
         } catch (IOException e) {
-            throw new BlogException(BlogError.WRONG_PASSWORD, null);
+            throw new BlogException(BlogErrorCode.WRONG_PASSWORD, null);
         }
     }
 
