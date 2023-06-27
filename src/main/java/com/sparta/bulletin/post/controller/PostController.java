@@ -28,13 +28,13 @@ public class PostController {
     }
 
     // 전체 게시글 작성 날짜 기준 내림차순으로 조회하기 (요구사항.1)
-    @GetMapping("/posts")
+    @GetMapping("/post")
     public List<PostResponseDto> getPosts() {
         return postService.getPosts();
     }
 
     // 선택한 게시글 조회하기 (요구사항.3)
-    @GetMapping("/posts/{id}")
+    @GetMapping("/post/{id}")
     public PostResponseDto getPost(@PathVariable Long id) {
         return postService.getPost(id);
     }
