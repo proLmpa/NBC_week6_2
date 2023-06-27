@@ -1,13 +1,15 @@
 package com.sparta.blog.post.service;
 
+import com.sparta.blog.comment.entity.Comment;
+import com.sparta.blog.comment.repository.CommentRepository;
 import com.sparta.blog.common.error.BlogError;
 import com.sparta.blog.common.exception.BlogException;
-import com.sparta.blog.post.dto.PostResponseDto;
-import com.sparta.blog.user.entity.User;
 import com.sparta.blog.common.jwt.JwtUtil;
 import com.sparta.blog.post.dto.PostRequestDto;
+import com.sparta.blog.post.dto.PostResponseDto;
 import com.sparta.blog.post.entity.Post;
 import com.sparta.blog.post.repository.PostRepository;
+import com.sparta.blog.user.entity.User;
 import com.sparta.blog.user.entity.UserRoleEnum;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ import java.util.List;
 @Service
 public class PostService {
     private final PostRepository  postRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
-    public PostService(PostRepository postRepository, JwtUtil jwtUtil) {
+    public PostService(PostRepository postRepository, CommentRepository commentRepository, JwtUtil jwtUtil) {
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -38,15 +42,18 @@ public class PostService {
 
     // 전체 게시글 작성 날짜 내림차 순으로 조회하기 (요구사항.1)
     public List<PostResponseDto> getPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+        return postRepository.findAllByOrderByCreatedAtDesc().stream().map((Post post) -> new PostResponseDto(
+                post, commentRepository.findAllByPostIdOrderByCreatedAtDesc(post.getId())
+        )).toList();
     }
 
     // 선택한 게시글 조회하기 (요구사항.3)
     public PostResponseDto getPost(Long id) {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
+        List<Comment> commentList = commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
 
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, commentList);
     }
 
     // 선택한 게시글 수정하기 (요구사항.4)
@@ -60,7 +67,9 @@ public class PostService {
             // post 내용 수정
             post.update(requestDto);
 
-            return new PostResponseDto(post);
+            List<Comment> commentList = commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
+
+            return new PostResponseDto(post, commentList);
         } else {
             throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
         }

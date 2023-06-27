@@ -3,6 +3,7 @@ package com.sparta.blog.comment.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.blog.comment.dto.CommentRequestDto;
 import com.sparta.blog.post.entity.Post;
+import com.sparta.blog.common.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "comment")
-public class Comment{
+public class Comment extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -24,4 +24,13 @@ public class PostResponseDto {
         this.modifiedAt = post.getModifiedAt();
         this.commentList = post.getCommentList();
     }
+
+    public PostResponseDto(Post post, List<Comment> commentList) {
+        this.title = post.getTitle();
+        this.username = post.getUsername();
+        this.contents = post.getContents();
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
+        this.commentList = commentList;
+    }
 }
