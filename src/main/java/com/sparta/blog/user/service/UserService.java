@@ -1,6 +1,6 @@
 package com.sparta.blog.user.service;
 
-import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.error.BlogErrorCode;
 import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.common.jwt.JwtUtil;
 import com.sparta.blog.user.dto.UserRequestDto;
@@ -32,7 +32,7 @@ public class UserService {
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            throw new BlogException(BlogError.IN_USED_USERNAME, null);
+            throw new BlogException(BlogErrorCode.IN_USED_USERNAME, null);
         }
 
         // 사용자 ROLE 확인

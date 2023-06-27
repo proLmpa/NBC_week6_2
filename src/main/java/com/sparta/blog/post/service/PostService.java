@@ -2,7 +2,7 @@ package com.sparta.blog.post.service;
 
 import com.sparta.blog.comment.entity.Comment;
 import com.sparta.blog.comment.repository.CommentRepository;
-import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.error.BlogErrorCode;
 import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.common.jwt.JwtUtil;
 import com.sparta.blog.post.dto.PostRequestDto;
@@ -71,7 +71,7 @@ public class PostService {
 
             return new PostResponseDto(post, commentList);
         } else {
-            throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
+            throw new BlogException(BlogErrorCode.UNAUTHORIZED_USER, null);
         }
     }
 
@@ -85,14 +85,14 @@ public class PostService {
             // post 내용 삭제
             postRepository.delete(post);
         } else {
-            throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
+            throw new BlogException(BlogErrorCode.UNAUTHORIZED_USER, null);
         }
     }
 
     // 해당 게시글이 DB에 존재하는지 확인
     public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new BlogException(BlogError.NOT_FOUND_POST, null));
+                new BlogException(BlogErrorCode.NOT_FOUND_POST, null));
     }
 
     public boolean matchUser(Post post, User user) {

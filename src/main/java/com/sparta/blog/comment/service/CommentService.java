@@ -3,7 +3,7 @@ package com.sparta.blog.comment.service;
 import com.sparta.blog.comment.dto.CommentRequestDto;
 import com.sparta.blog.comment.dto.CommentResponseDto;
 import com.sparta.blog.comment.entity.Comment;
-import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.error.BlogErrorCode;
 import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.post.entity.Post;
 import com.sparta.blog.user.entity.User;
@@ -50,7 +50,7 @@ public class CommentService {
 
             return new CommentResponseDto(comment);
         } else {
-            throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
+            throw new BlogException(BlogErrorCode.UNAUTHORIZED_USER, null);
         }
     }
 
@@ -63,7 +63,7 @@ public class CommentService {
             commentRepository.delete(comment);
 
         } else {
-            throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
+            throw new BlogException(BlogErrorCode.UNAUTHORIZED_USER, null);
         }
     }
 
@@ -71,12 +71,12 @@ public class CommentService {
     // 해당 게시글이 DB에 존재하는지 확인
     public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new BlogException(BlogError.NOT_FOUND_POST, null));
+                new BlogException(BlogErrorCode.NOT_FOUND_POST, null));
     }
 
     public Comment findComment(Long id) {
         return commentRepository.findById(id).orElseThrow(() ->
-                new BlogException(BlogError.NOT_FOUND_COMMENT, null));
+                new BlogException(BlogErrorCode.NOT_FOUND_COMMENT, null));
     }
 
     public boolean matchUser(Comment comment, User user) {

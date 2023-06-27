@@ -1,7 +1,7 @@
 package com.sparta.blog.user.controller;
 
 import com.sparta.blog.common.dto.ApiResult;
-import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.error.BlogErrorCode;
 import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.user.dto.UserInfoDto;
 import com.sparta.blog.user.dto.UserRequestDto;
@@ -37,7 +37,7 @@ public class UserController {
             for(FieldError fieldError : bindingResult.getFieldErrors()) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
             }
-            throw new BlogException(BlogError.INVALID_TYPE_VALUE, null);
+            throw new BlogException(BlogErrorCode.INVALID_TYPE_VALUE, null);
         }
 
         userService.signup(requestDto);
