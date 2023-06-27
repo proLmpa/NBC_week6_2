@@ -1,13 +1,16 @@
 package com.sparta.blog.user.controller;
 
+import com.sparta.blog.common.dto.ApiResult;
+import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.user.dto.UserInfoDto;
-import com.sparta.blog.user.entity.UserRoleEnum;
 import com.sparta.blog.user.dto.UserRequestDto;
-import com.sparta.blog.user.dto.UserResponseDto;
+import com.sparta.blog.user.entity.UserRoleEnum;
 import com.sparta.blog.user.security.UserDetailsImpl;
 import com.sparta.blog.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,18 +30,18 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public UserResponseDto signup(@Valid @RequestBody UserRequestDto requestDto, BindingResult bindingResult) {
+    public ApiResult signup(@Valid @RequestBody UserRequestDto requestDto, BindingResult bindingResult) {
         // Validation 예외 처리
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         if(fieldErrors.size() > 0) {
             for(FieldError fieldError : bindingResult.getFieldErrors()) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
             }
-            return new UserResponseDto(401L, "SIGN_UP_FAILURE");
+            throw new BlogException(BlogError.INVALID_TYPE_VALUE, null);
         }
 
         userService.signup(requestDto);
-        return new UserResponseDto(200L, "SIGN_UP_SUCCESS");
+        return new ApiResult("SUCCESS_SIGN_UP", HttpStatus.OK.value());
     }
 
     @GetMapping("/user-info")

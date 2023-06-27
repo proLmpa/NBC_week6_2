@@ -1,10 +1,9 @@
 package com.sparta.blog.post.controller;
 
 import com.sparta.blog.common.dto.ApiResult;
-import com.sparta.blog.post.dto.PostResponseDto;
-import com.sparta.blog.user.dto.UserResponseDto;
-import com.sparta.blog.post.service.PostService;
 import com.sparta.blog.post.dto.PostRequestDto;
+import com.sparta.blog.post.dto.PostResponseDto;
+import com.sparta.blog.post.service.PostService;
 import com.sparta.blog.user.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum BlogError {
-    INVALID_TOKEN(400, "토큰이 유효하지 않습니다."), // 필수
+    INVALID_TOKEN(400, "토큰이 유효하지 않습니다."), // 필수 (확인)
     INVALID_TYPE_VALUE(400, "전달된 변수의 데이터 타입이 유효하지 않습니다."), // 필수
     UNAUTHORIZED_USER(400, "작성자만 수정/삭제할 수 있습니다."), // 필수
-    IN_USED_USERNAME(400, "중복된 username 입니다."), // 필수\
+    IN_USED_USERNAME(400, "중복된 username 입니다."), // 필수
     NOT_FOUND_POST(400, "요청한 게시글이 존재하지 않습니다."),
     WRONG_PASSWORD(400, "비밀번호가 틀렸습니다."),
     NOT_FOUND_COMMENT(400, "작성한 댓글을 찾을 수 없습니다.");
