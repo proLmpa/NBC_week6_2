@@ -18,8 +18,8 @@ public class Comment{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "comment_contents", nullable = false)
-    private String commentContents;
+    @Column(name = "content", nullable = false)
+    private String content;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -30,11 +30,11 @@ public class Comment{
     private Post post;
 
     public Comment(CommentRequestDto requestDto, String username){
-        this.commentContents = requestDto.getCommentContents();
+        this.content = requestDto.getContent();
         this.username = username;
     }
 
     public void update(CommentRequestDto requestDto) {
-        this.commentContents = requestDto.getCommentContents();
+        this.content = requestDto.getContent();
     }
 }
