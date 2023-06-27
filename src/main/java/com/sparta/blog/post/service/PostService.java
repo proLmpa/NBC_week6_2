@@ -8,6 +8,7 @@ import com.sparta.blog.common.jwt.JwtUtil;
 import com.sparta.blog.post.dto.PostRequestDto;
 import com.sparta.blog.post.entity.Post;
 import com.sparta.blog.post.repository.PostRepository;
+import com.sparta.blog.user.entity.UserRoleEnum;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,8 @@ public class PostService {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 
-        if(matchUser(post, user)){
+        // 해당 사용자가 작성한 댓글 여부 혹은 관리자 여부 확인
+        if(matchUser(post, user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
             // post 내용 수정
             post.update(requestDto);
 
@@ -69,7 +71,8 @@ public class PostService {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 
-        if(matchUser(post, user)){
+        // 해당 사용자가 작성한 댓글 여부 혹은 관리자 여부 확인
+        if(matchUser(post, user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
             // post 내용 삭제
             postRepository.delete(post);
         } else {

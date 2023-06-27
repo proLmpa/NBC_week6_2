@@ -3,11 +3,14 @@ package com.sparta.blog.comment.service;
 import com.sparta.blog.comment.dto.CommentRequestDto;
 import com.sparta.blog.comment.dto.CommentResponseDto;
 import com.sparta.blog.comment.entity.Comment;
+import com.sparta.blog.common.error.BlogError;
+import com.sparta.blog.common.exception.BlogException;
 import com.sparta.blog.post.entity.Post;
 import com.sparta.blog.user.entity.User;
 import com.sparta.blog.common.jwt.JwtUtil;
 import com.sparta.blog.comment.repository.CommentRepository;
 import com.sparta.blog.post.repository.PostRepository;
+import com.sparta.blog.user.entity.UserRoleEnum;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,30 +40,30 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) throws Exception {
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
         // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);
 
-        // 해당 사용자가 작성한 댓글 여부 확인
-        if(matchUser(comment, user)) {
+        // 해당 사용자가 작성한 댓글 여부 혹은 관리자 여부 확인
+        if(matchUser(comment, user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
             comment.update(requestDto);
 
             return new CommentResponseDto(comment);
         } else {
-            throw new Exception("Unauthorized");
+            throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
         }
     }
 
-    public void deleteComment(Long commentId, User user) throws Exception{
+    public void deleteComment(Long commentId, User user){
         // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);
 
-        // 해당 사용자가 작성한 댓글 여부 확인
-        if(matchUser(comment, user)) {
+        // 해당 사용자가 작성한 댓글 여부 혹은 관리자 여부 확인
+        if(matchUser(comment, user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
             commentRepository.delete(comment);
 
         } else {
-            throw new Exception("Unauthorized");
+            throw new BlogException(BlogError.UNAUTHORIZED_USER, null);
         }
     }
 
@@ -68,12 +71,12 @@ public class CommentService {
     // 해당 게시글이 DB에 존재하는지 확인
     public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
+                new BlogException(BlogError.NOT_FOUND_POST, null));
     }
 
     public Comment findComment(Long id) {
         return commentRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 댓글은 존재하지 않습니다."));
+                new BlogException(BlogError.NOT_FOUND_COMMENT, null));
     }
 
     public boolean matchUser(Comment comment, User user) {
