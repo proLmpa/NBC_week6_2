@@ -30,7 +30,7 @@ public class Post extends TimeStamped {
     private String contents;
 
     @Column(name = "comment_list")
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public void addCommentList(Comment comment) {
