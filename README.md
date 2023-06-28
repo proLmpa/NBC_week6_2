@@ -1,4 +1,4 @@
-# NBC_week6_1
+# NBC_week6_2
 
 * 작성한 API 명세
 
