@@ -7,7 +7,7 @@
  1. USER API
 
     a. 회원 가입 API (/api/user/signup)
-    - username과 password를 json 형식으로 보내 글자 수, 입력 제한 등에 대한 유효성 검사를 하고 적합하면 DB에 저장합니다.
+    - username과 password, 그리고 role("ADMIN"과 "USER"만 입력 가능)을 json 형식으로 보내 글자 수, 입력 제한 등에 대한 유효성 검사를 하고 적합하면 DB에 저장합니다.
  
     b.로그인 API (/api/user/login)
     - username과 password를 json 형식으로 보내 글자 수, 입력 제한 등에 대한 유효성 검사와 DB 존재 유무를 판단하여 존재한다면 JWT를 생성하여 이를 통해 제한된 기능(게시, 수정, 삭제)을 사용 가능하게 합니다.
