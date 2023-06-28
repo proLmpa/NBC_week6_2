@@ -1,38 +1,21 @@
 # NBC_week6_1
 
 * 작성한 API 명세
-  * 링크: [노션 링크](https://www.notion.so/06-28-lv-3-95-0b889f8485c6439580ca3ef0c7562a64)
- 
+
+|API 명|Method|URL|Request Header|Request|Response|Response Header|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|회원가입|POST|api/user/signup||{"username": "part", "password": "partial123", "role": "USER"}|{"msg": "SUCCESS_SIGN_UP", "statusCode": 200}||
+|로그인|POST|api/user/login||{"username": "part", "password": "partial123"}|{"msg": "SUCCESS_LOGIN", "statusCode": 200}|Header : {"Authorization" : "Bearer... "}|
+|전체 게시글 조회|GET|api/post|||[ {"title": "title from part", "username": "part", "contents": "content from part", "createdAt": "2023-06-28T10:00:04.032185", "modifiedAt": "2023-06-28T10:00:04.032185", "commentList": [] },  {"title": "good", "username": "part", "contents": "no, bad", "createdAt": "2023-06-28T09:59:48.081672", "modifiedAt": "2023-06-28T10:00:56.025748", "commentList": [] } ]||
+|선택 게시글 조회|GET|api/post/{id}|||{"title": "title from part", "username": "part", "contents": "content from part", "createdAt": "2023-06-28T10:00:04.032185", "modifiedAt": "2023-06-28T10:00:04.032185", "commentList": [] }||
+|게시글 생성|POST|api/post|Header : {"Authorization" : "Bearer... "}|{"title": "title from part", "contents": "content from part"}|{"title": "title from part", "username": "part", "contents": "content from part", "createdAt": "2023-06-28T10:00:04.0321854", "modifiedAt": "2023-06-28T10:00:04.0321854", "commentList": [] }||
+|게시글 수정|PUT|api/post/{id}|Header : {"Authorization" : "Bearer... "}|{"title": "good", "contents": "no, bad" }|{"title": "good", "username": "part", "contents": "no, bad", "createdAt": "2023-06-28T09:59:48.081672", "modifiedAt": "2023-06-28T10:00:56.0170722", "commentList": [] }||
+|게시글 삭제|DELETE|api/post/{id}|Header : {"Authorization" : "Bearer... "}||{"msg": "SUCCESS_DELETE_POST", "statusCode": 200}||
+|댓글 생성|POST|api/comment|Header : {"Authorization" : "Bearer... "}|{"postId": 2, "content": "nice post"}|{"commentId": 1, "username": "part", "content": "nice post"}||
+|댓글 수정|PUT|api/comment/{id}|Header : {"Authorization" : "Bearer... "}|{"content": "YKW? it was actually bad.."}|{"commentId": 1, "username": "part", "content": "YKW? it was actually bad.."}||
+|댓글 삭제|DELETE|api/comment/{id}|Header : {"Authorization" : "Bearer... "}||{"msg": "SUCCESS_DELETE_COMMENT", "statusCode": 200}||
+
 ====================================== 
- 1. USER API
-
-    a. 회원 가입 API (/api/user/signup)
-    - username과 password, 그리고 role("ADMIN"과 "USER"만 입력 가능)을 json 형식으로 보내 글자 수, 입력 제한 등에 대한 유효성 검사를 하고 적합하면 DB에 저장합니다.
- 
-    b.로그인 API (/api/user/login)
-    - username과 password를 json 형식으로 보내 글자 수, 입력 제한 등에 대한 유효성 검사와 DB 존재 유무를 판단하여 존재한다면 JWT를 생성하여 이를 통해 제한된 기능(게시, 수정, 삭제)을 사용 가능하게 합니다.
-
- 2. POST API
- 
-    a. 전체 조회 (/api/post)      --  토큰 없이 api 만으로도 기능 사용 가능
- 
-    b. 선택 조회 (/api/post/{id}) -- 토큰 없이 api 만으로도 기능 사용 가능
- 
-    c. 글 생성  (/api/post)        -- header에 JWT를 등록하고 title과 contents를 json 형식으로 전송하여 글 생성
- 
-    d. 글 수정  (/api/post/{id})   -- header에 JWT를 등록하고 수정할 title과 contents를 json 형식으로, 수정할 글 번호를 @PathVariable로 전송하여 글 수정
- 
-    e. 글 삭제  (/api/post/{id})   -- header에 JWT를 등록하고 삭제할 글 번호를 @PathVariable로 전송하여 글 삭제
-
-3. COMMENT API
-
-   a. 댓글 생성 (/api/comment) -- header에 JWT를 등록하고 postId와 content를 json 형식으로 전송하여 댓글 생성
-
-   b. 댓글 수정 (/api/comment/{id}) -- header에 JWT를 등록하고 수정할 postId와 content를 json 형식으로, 수정할 댓글 번호를 @PathVariable로 전송하여 댓글 수정
-
-   c. 댓글 삭제 (/api/comment/{id}) -- header에 JWT를 등록하고 삭제할 댓글 번호를 @PathVariable로 전송하여 댓글 삭제
-
- ====================================== 
 
 * `구현되지 않은 점`
 
