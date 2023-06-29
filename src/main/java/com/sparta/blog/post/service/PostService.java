@@ -11,7 +11,6 @@ import com.sparta.blog.post.entity.Post;
 import com.sparta.blog.post.repository.PostRepository;
 import com.sparta.blog.user.entity.User;
 import com.sparta.blog.user.entity.UserRoleEnum;
-import com.sparta.blog.user.security.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +30,6 @@ public class PostService {
 
     // 게시글 작성하기 (요구사항.2)
     public PostResponseDto createPost(PostRequestDto requestDto, User user){
-        if(user == null) throw new BlogException(BlogErrorCode.INVALID_TOKEN, null);
-
         // RequestDto -> Entity
         Post post = new Post(requestDto, user.getUsername());
 
@@ -62,8 +59,6 @@ public class PostService {
     // 선택한 게시글 수정하기 (요구사항.4)
     @Transactional
     public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
-        if(user == null) throw new BlogException(BlogErrorCode.INVALID_TOKEN, null);
-
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 
@@ -82,8 +77,6 @@ public class PostService {
 
     // 선택한 게시글 삭제하기 (요구사항.5)
     public void deletePost(Long id, User user) {
-        if(user == null) throw new BlogException(BlogErrorCode.INVALID_TOKEN, null);
-
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
 

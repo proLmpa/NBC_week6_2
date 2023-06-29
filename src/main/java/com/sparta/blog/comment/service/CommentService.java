@@ -27,8 +27,6 @@ public class CommentService {
     }
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
-        if(user == null) throw new BlogException(BlogErrorCode.INVALID_TOKEN, null);
-
         // 선택한 게시글의 DB 존재 여부 확인
         Post post = findPost(requestDto.getPostId());
 
@@ -43,8 +41,6 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
-        if(user == null) throw new BlogException(BlogErrorCode.INVALID_TOKEN, null);
-
         // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);
 
@@ -59,8 +55,6 @@ public class CommentService {
     }
 
     public void deleteComment(Long commentId, User user){
-        if(user == null) throw new BlogException(BlogErrorCode.INVALID_TOKEN, null);
-
         // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);
 
