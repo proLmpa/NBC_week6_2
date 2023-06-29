@@ -25,9 +25,9 @@ public class Comment extends TimeStamped {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @ManyToOne
+    // @JsonBackReference // 원래는 @ManyToOne의 FETCHTYPE을 Lazy로 바꿔야 한다.
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    @JsonBackReference // 원래는 @ManyToOne의 FETCHTYPE을 Lazy로 바꿔야 한다.
     private Post post;
 
     public Comment(CommentRequestDto requestDto, String username){

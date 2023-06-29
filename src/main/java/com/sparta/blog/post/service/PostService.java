@@ -11,8 +11,8 @@ import com.sparta.blog.post.entity.Post;
 import com.sparta.blog.post.repository.PostRepository;
 import com.sparta.blog.user.entity.User;
 import com.sparta.blog.user.entity.UserRoleEnum;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +29,7 @@ public class PostService {
     }
 
     // 게시글 작성하기 (요구사항.2)
+    @Transactional
     public PostResponseDto createPost(PostRequestDto requestDto, User user){
         // RequestDto -> Entity
         Post post = new Post(requestDto, user.getUsername());
@@ -41,6 +42,7 @@ public class PostService {
     }
 
     // 전체 게시글 작성 날짜 내림차 순으로 조회하기 (요구사항.1)
+    @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map((Post post) -> new PostResponseDto(
                 post, commentRepository.findAllByPostIdOrderByCreatedAtDesc(post.getId())
@@ -48,6 +50,7 @@ public class PostService {
     }
 
     // 선택한 게시글 조회하기 (요구사항.3)
+    @Transactional(readOnly = true)
     public PostResponseDto getPost(Long id) {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);
@@ -76,6 +79,7 @@ public class PostService {
     }
 
     // 선택한 게시글 삭제하기 (요구사항.5)
+    @Transactional
     public void deletePost(Long id, User user) {
         // 해당 게시글이 DB에 존재하는지 확인
         Post post = findPost(id);

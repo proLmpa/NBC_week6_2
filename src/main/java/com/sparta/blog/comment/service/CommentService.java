@@ -26,6 +26,7 @@ public class CommentService {
         this.jwtUtil = jwtUtil;
     }
 
+    @Transactional
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
         // 선택한 게시글의 DB 존재 여부 확인
         Post post = findPost(requestDto.getPostId());
@@ -54,6 +55,7 @@ public class CommentService {
         }
     }
 
+    @Transactional
     public void deleteComment(Long commentId, User user){
         // 선택한 댓글이 DB이 존재하는지 확인
         Comment comment = findComment(commentId);

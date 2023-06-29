@@ -1,10 +1,12 @@
 package com.sparta.blog.post.dto;
 
+import com.sparta.blog.comment.dto.CommentResponseDto;
 import com.sparta.blog.comment.entity.Comment;
 import com.sparta.blog.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,7 +16,7 @@ public class PostResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<Comment> commentList;
+    private List<CommentResponseDto> commentList;
 
     public PostResponseDto(Post post) {
         this.title = post.getTitle();
@@ -22,7 +24,7 @@ public class PostResponseDto {
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.commentList = post.getCommentList();
+        this.commentList = new ArrayList<>();
     }
 
     public PostResponseDto(Post post, List<Comment> commentList) {
@@ -31,6 +33,6 @@ public class PostResponseDto {
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.commentList = commentList;
+        this.commentList = commentList.stream().map(CommentResponseDto::new).toList();
     }
 }
